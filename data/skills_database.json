@@ -1,0 +1,97 @@
+{
+  "technical_skills": {
+    "programming_languages": [
+      "Python", "Java", "JavaScript", "TypeScript", "C++", "C#", "C", "Ruby", "Go", "Rust",
+      "Swift", "Kotlin", "Scala", "PHP", "Perl", "R", "MATLAB", "Julia", "Dart", "Lua",
+      "Objective-C", "Assembly", "Fortran", "COBOL", "Haskell", "Erlang", "Elixir", "Clojure",
+      "F#", "Visual Basic", "VBA", "Groovy", "Shell", "Bash", "PowerShell", "SQL", "PL/SQL"
+    ],
+    "web_frameworks": [
+      "React", "Angular", "Vue.js", "Next.js", "Nuxt.js", "Svelte", "Ember.js", "Backbone.js",
+      "Django", "Flask", "FastAPI", "Express.js", "Node.js", "Spring Boot", "Spring MVC",
+      "Ruby on Rails", "Laravel", "Symfony", "ASP.NET", "ASP.NET Core", "Blazor",
+      "Phoenix", "Gin", "Echo", "Fiber", "NestJS", "Koa", "Hapi", "Gatsby", "Remix"
+    ],
+    "mobile_development": [
+      "React Native", "Flutter", "SwiftUI", "UIKit", "Android SDK", "Jetpack Compose",
+      "Xamarin", "Ionic", "Cordova", "PhoneGap", "NativeScript", "Expo"
+    ],
+    "databases": [
+      "MySQL", "PostgreSQL", "MongoDB", "Redis", "Elasticsearch", "Cassandra", "DynamoDB",
+      "Oracle", "SQL Server", "SQLite", "MariaDB", "CouchDB", "Neo4j", "InfluxDB",
+      "Firebase", "Firestore", "Supabase", "PlanetScale", "CockroachDB", "TimescaleDB"
+    ],
+    "cloud_platforms": [
+      "AWS", "Amazon Web Services", "Azure", "Microsoft Azure", "Google Cloud", "GCP",
+      "Heroku", "DigitalOcean", "Linode", "Vultr", "IBM Cloud", "Oracle Cloud",
+      "Alibaba Cloud", "Cloudflare", "Vercel", "Netlify", "Railway", "Render"
+    ],
+    "devops_tools": [
+      "Docker", "Kubernetes", "Jenkins", "GitLab CI", "GitHub Actions", "CircleCI",
+      "Travis CI", "Ansible", "Terraform", "Puppet", "Chef", "Vagrant", "Helm",
+      "ArgoCD", "Spinnaker", "Prometheus", "Grafana", "ELK Stack", "Datadog", "New Relic"
+    ],
+    "version_control": [
+      "Git", "GitHub", "GitLab", "Bitbucket", "SVN", "Mercurial", "Perforce"
+    ],
+    "data_science_ml": [
+      "TensorFlow", "PyTorch", "Keras", "scikit-learn", "Pandas", "NumPy", "SciPy",
+      "Matplotlib", "Seaborn", "Plotly", "Jupyter", "Apache Spark", "Hadoop",
+      "Databricks", "MLflow", "Kubeflow", "SageMaker", "Hugging Face", "OpenCV",
+      "NLTK", "spaCy", "Transformers", "XGBoost", "LightGBM", "CatBoost"
+    ],
+    "testing_frameworks": [
+      "Jest", "Mocha", "Chai", "Jasmine", "Cypress", "Selenium", "Playwright",
+      "Puppeteer", "pytest", "unittest", "JUnit", "TestNG", "RSpec", "Capybara",
+      "PHPUnit", "NUnit", "xUnit", "Postman", "SoapUI", "K6", "Locust", "JMeter"
+    ],
+    "api_technologies": [
+      "REST", "RESTful API", "GraphQL", "gRPC", "SOAP", "WebSocket", "WebRTC",
+      "OpenAPI", "Swagger", "Postman", "API Gateway", "OAuth", "JWT", "OAuth2"
+    ],
+    "frontend_technologies": [
+      "HTML", "HTML5", "CSS", "CSS3", "SASS", "SCSS", "LESS", "Tailwind CSS",
+      "Bootstrap", "Material UI", "Chakra UI", "Ant Design", "Styled Components",
+      "Webpack", "Vite", "Rollup", "Parcel", "Babel", "ESLint", "Prettier"
+    ],
+    "security": [
+      "OWASP", "Penetration Testing", "Vulnerability Assessment", "Encryption",
+      "SSL/TLS", "OAuth", "SAML", "SSO", "IAM", "RBAC", "Security Auditing",
+      "Firewall", "VPN", "IDS/IPS", "SIEM", "SOC", "Compliance"
+    ],
+    "networking": [
+      "TCP/IP", "HTTP/HTTPS", "DNS", "Load Balancing", "CDN", "Nginx", "Apache",
+      "HAProxy", "Reverse Proxy", "VPN", "Firewall", "Network Security"
+    ]
+  },
+  "soft_skills": [
+    "Leadership", "Communication", "Teamwork", "Problem Solving", "Critical Thinking",
+    "Time Management", "Project Management", "Adaptability", "Creativity", "Innovation",
+    "Collaboration", "Mentoring", "Coaching", "Conflict Resolution", "Negotiation",
+    "Presentation Skills", "Public Speaking", "Written Communication", "Active Listening",
+    "Emotional Intelligence", "Decision Making", "Strategic Thinking", "Analytical Skills",
+    "Attention to Detail", "Organization", "Multitasking", "Prioritization",
+    "Self-Motivation", "Initiative", "Accountability", "Reliability", "Flexibility",
+    "Stress Management", "Work Ethic", "Professionalism", "Customer Service",
+    "Stakeholder Management", "Cross-functional Collaboration", "Remote Work",
+    "Agile Methodology", "Scrum", "Kanban", "Lean", "Six Sigma"
+  ],
+  "certifications": [
+    "AWS Certified Solutions Architect", "AWS Certified Developer", "AWS Certified SysOps",
+    "Azure Administrator", "Azure Developer", "Azure Solutions Architect",
+    "Google Cloud Professional", "GCP Associate Cloud Engineer",
+    "Certified Kubernetes Administrator", "CKA", "CKAD", "CKS",
+    "PMP", "Project Management Professional", "Scrum Master", "CSM", "PSM",
+    "CISSP", "CISM", "CEH", "CompTIA Security+", "CompTIA Network+", "CompTIA A+",
+    "CCNA", "CCNP", "CCIE", "RHCE", "RHCSA",
+    "Oracle Certified Professional", "Microsoft Certified", "Salesforce Certified",
+    "Six Sigma Green Belt", "Six Sigma Black Belt", "ITIL", "TOGAF"
+  ],
+  "methodologies": [
+    "Agile", "Scrum", "Kanban", "Lean", "Waterfall", "DevOps", "CI/CD",
+    "Test-Driven Development", "TDD", "Behavior-Driven Development", "BDD",
+    "Domain-Driven Design", "DDD", "Microservices", "Event-Driven Architecture",
+    "SOLID Principles", "Design Patterns", "Clean Code", "Code Review",
+    "Pair Programming", "Mob Programming", "Extreme Programming", "XP"
+  ]
+}

@@ -1,0 +1,4 @@
+# file: /home/kcodess/code & stuff/STEALTH STARTUP/itishwatitis/utils/scorer.py
+# hypothesis_version: 6.148.3
+
+[0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.8, 0.9, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 15.0, 20.0, 25.0, 100.0, 100, '[│┤├┼┴┬╔╗╚╝═║╠╣╦╩╬]', '\\$\\d+', '\\d+%', '\\d+[kKmMbB]', '^\\s*[•\\-\\*\\◦]', '^\\s*\\d+\\.', '__contains__', 'ats_compatibility', 'bonuses', 'component_messages', 'content', 'content_score', 'critical_errors', 'education', 'experience', 'formatting', 'formatting_score', 'grammar', 'high', 'keywords', 'keywords_score', 'location_privacy', 'overall_score', 'penalties', 'penalty_applied', 'perfect_grammar', 'privacy_risk', 'projects', 'score_cache', 'skill_validation', 'skills', 'summary', 'total_errors', 'unvalidated_skills', 'utf-8', 'validation_score']

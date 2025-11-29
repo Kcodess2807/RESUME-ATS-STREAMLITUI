@@ -1,0 +1,68 @@
+{
+  "leadership": [
+    "Led", "Directed", "Managed", "Supervised", "Coordinated", "Oversaw",
+    "Headed", "Chaired", "Orchestrated", "Spearheaded", "Pioneered",
+    "Guided", "Mentored", "Coached", "Trained", "Delegated", "Empowered",
+    "Motivated", "Inspired", "Influenced", "Championed", "Advocated"
+  ],
+  "achievement": [
+    "Achieved", "Accomplished", "Attained", "Exceeded", "Surpassed",
+    "Outperformed", "Delivered", "Completed", "Finished", "Succeeded",
+    "Won", "Earned", "Gained", "Secured", "Obtained", "Reached"
+  ],
+  "improvement": [
+    "Improved", "Enhanced", "Optimized", "Streamlined", "Upgraded",
+    "Modernized", "Refined", "Revamped", "Transformed", "Revolutionized",
+    "Accelerated", "Boosted", "Elevated", "Strengthened", "Maximized",
+    "Minimized", "Reduced", "Decreased", "Cut", "Eliminated"
+  ],
+  "creation": [
+    "Created", "Developed", "Designed", "Built", "Established",
+    "Founded", "Launched", "Initiated", "Introduced", "Implemented",
+    "Constructed", "Produced", "Generated", "Formulated", "Devised",
+    "Invented", "Innovated", "Pioneered", "Originated", "Conceptualized"
+  ],
+  "analysis": [
+    "Analyzed", "Assessed", "Evaluated", "Examined", "Investigated",
+    "Researched", "Studied", "Reviewed", "Audited", "Inspected",
+    "Diagnosed", "Identified", "Discovered", "Determined", "Calculated",
+    "Measured", "Quantified", "Forecasted", "Projected", "Estimated"
+  ],
+  "communication": [
+    "Communicated", "Presented", "Reported", "Documented", "Published",
+    "Authored", "Wrote", "Drafted", "Composed", "Edited", "Proofread",
+    "Translated", "Interpreted", "Articulated", "Conveyed", "Explained",
+    "Clarified", "Demonstrated", "Illustrated", "Persuaded", "Negotiated"
+  ],
+  "collaboration": [
+    "Collaborated", "Partnered", "Cooperated", "Contributed", "Participated",
+    "Engaged", "Facilitated", "Mediated", "Liaised", "Interfaced",
+    "Networked", "Consulted", "Advised", "Supported", "Assisted"
+  ],
+  "technical": [
+    "Programmed", "Coded", "Developed", "Engineered", "Architected",
+    "Configured", "Deployed", "Integrated", "Migrated", "Automated",
+    "Debugged", "Troubleshot", "Resolved", "Fixed", "Patched",
+    "Refactored", "Optimized", "Scaled", "Maintained", "Administered"
+  ],
+  "management": [
+    "Managed", "Administered", "Organized", "Planned", "Scheduled",
+    "Budgeted", "Allocated", "Prioritized", "Monitored", "Tracked",
+    "Controlled", "Regulated", "Standardized", "Systematized", "Centralized"
+  ],
+  "problem_solving": [
+    "Solved", "Resolved", "Addressed", "Tackled", "Overcame",
+    "Troubleshot", "Debugged", "Diagnosed", "Remedied", "Rectified",
+    "Corrected", "Fixed", "Repaired", "Restored", "Recovered"
+  ],
+  "growth": [
+    "Grew", "Expanded", "Increased", "Scaled", "Extended",
+    "Broadened", "Diversified", "Multiplied", "Doubled", "Tripled",
+    "Amplified", "Magnified", "Intensified", "Heightened", "Raised"
+  ],
+  "efficiency": [
+    "Streamlined", "Simplified", "Consolidated", "Centralized", "Standardized",
+    "Automated", "Digitized", "Modernized", "Systematized", "Reorganized",
+    "Restructured", "Reengineered", "Redesigned", "Reconfigured", "Realigned"
+  ]
+}

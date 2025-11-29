@@ -1,0 +1,4 @@
+# file: /home/kcodess/code & stuff/STEALTH STARTUP/itishwatitis/utils/model_loader.py
+# hypothesis_version: 6.148.3
+
+['all-MiniLM-L6-v2', 'embedder', 'en-US', 'en_core_web_md', 'en_core_web_sm', 'grammar_tool', 'models', 'nlp', 'punkt', 'stopwords', 'wordnet']

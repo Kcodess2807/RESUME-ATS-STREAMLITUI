@@ -1,0 +1,4 @@
+# file: /home/kcodess/code & stuff/STEALTH STARTUP/itishwatitis/utils/cache_manager.py
+# hypothesis_version: 6.148.3
+
+[0.6, 3600, 'analysis_cache', 'cache_keys', 'cached_analyses', 'embedder', 'grammar_checker', 'nlp', 'oldest_entry', 'results', 'timestamp', 'utf-8']

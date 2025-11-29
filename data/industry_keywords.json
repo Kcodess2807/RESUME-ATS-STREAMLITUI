@@ -1,0 +1,80 @@
+{
+  "software_engineering": [
+    "Software Development", "Full Stack", "Backend", "Frontend", "API Development",
+    "Microservices", "Distributed Systems", "Cloud Computing", "DevOps", "CI/CD",
+    "Agile", "Scrum", "Code Review", "Technical Debt", "Refactoring",
+    "System Design", "Architecture", "Scalability", "Performance Optimization",
+    "Security", "Testing", "Debugging", "Version Control", "Documentation"
+  ],
+  "data_science": [
+    "Machine Learning", "Deep Learning", "Artificial Intelligence", "AI/ML",
+    "Data Analysis", "Data Mining", "Data Visualization", "Statistical Analysis",
+    "Predictive Modeling", "Natural Language Processing", "NLP", "Computer Vision",
+    "Neural Networks", "Feature Engineering", "Model Training", "Model Deployment",
+    "A/B Testing", "Experimentation", "Big Data", "Data Pipeline", "ETL",
+    "Business Intelligence", "BI", "Data Warehousing", "Analytics"
+  ],
+  "product_management": [
+    "Product Strategy", "Product Roadmap", "Product Development", "Product Launch",
+    "User Research", "Market Research", "Competitive Analysis", "User Stories",
+    "Requirements Gathering", "Stakeholder Management", "Cross-functional",
+    "Go-to-Market", "GTM", "KPIs", "OKRs", "Metrics", "Analytics",
+    "Customer Feedback", "User Experience", "UX", "MVP", "Iteration"
+  ],
+  "design": [
+    "User Experience", "UX Design", "User Interface", "UI Design", "Visual Design",
+    "Interaction Design", "Information Architecture", "Wireframing", "Prototyping",
+    "User Research", "Usability Testing", "Design Systems", "Design Thinking",
+    "Responsive Design", "Mobile Design", "Accessibility", "A11y", "WCAG",
+    "Figma", "Sketch", "Adobe XD", "InVision", "Zeplin"
+  ],
+  "marketing": [
+    "Digital Marketing", "Content Marketing", "SEO", "SEM", "PPC",
+    "Social Media Marketing", "Email Marketing", "Marketing Automation",
+    "Lead Generation", "Conversion Optimization", "CRO", "Analytics",
+    "Brand Strategy", "Brand Management", "Campaign Management",
+    "Customer Acquisition", "Customer Retention", "Growth Marketing",
+    "Influencer Marketing", "Affiliate Marketing", "Marketing ROI"
+  ],
+  "finance": [
+    "Financial Analysis", "Financial Modeling", "Budgeting", "Forecasting",
+    "Financial Planning", "FP&A", "Accounting", "GAAP", "IFRS",
+    "Audit", "Compliance", "Risk Management", "Investment Analysis",
+    "Portfolio Management", "Valuation", "M&A", "Due Diligence",
+    "Financial Reporting", "Cost Analysis", "Revenue Recognition"
+  ],
+  "sales": [
+    "Sales Strategy", "Business Development", "Account Management",
+    "Client Relations", "Customer Success", "Lead Generation", "Prospecting",
+    "Pipeline Management", "CRM", "Salesforce", "Negotiation", "Closing",
+    "Revenue Growth", "Quota Achievement", "Territory Management",
+    "Enterprise Sales", "B2B Sales", "B2C Sales", "Inside Sales", "Field Sales"
+  ],
+  "human_resources": [
+    "Talent Acquisition", "Recruiting", "Hiring", "Onboarding", "Training",
+    "Employee Development", "Performance Management", "Compensation",
+    "Benefits Administration", "Employee Relations", "HR Compliance",
+    "HRIS", "Workforce Planning", "Succession Planning", "Diversity",
+    "Inclusion", "Employee Engagement", "Culture", "Retention"
+  ],
+  "operations": [
+    "Operations Management", "Process Improvement", "Lean", "Six Sigma",
+    "Supply Chain", "Logistics", "Inventory Management", "Procurement",
+    "Vendor Management", "Quality Assurance", "QA", "Quality Control",
+    "Project Management", "Program Management", "Resource Planning",
+    "Capacity Planning", "Workflow Optimization", "SOP", "KPIs"
+  ],
+  "healthcare": [
+    "Healthcare IT", "EHR", "EMR", "HIPAA", "Clinical", "Patient Care",
+    "Medical Records", "Healthcare Analytics", "Telemedicine", "Telehealth",
+    "Clinical Trials", "FDA", "Regulatory Compliance", "Medical Devices",
+    "Pharmaceutical", "Biotech", "Life Sciences", "Healthcare Operations"
+  ],
+  "cybersecurity": [
+    "Information Security", "Network Security", "Application Security",
+    "Cloud Security", "Endpoint Security", "Identity Management", "IAM",
+    "Threat Detection", "Incident Response", "Vulnerability Management",
+    "Penetration Testing", "Security Audit", "Compliance", "SOC",
+    "SIEM", "Encryption", "Firewall", "Zero Trust", "Security Operations"
+  ]
+}
