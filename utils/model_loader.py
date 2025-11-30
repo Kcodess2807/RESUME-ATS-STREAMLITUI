@@ -14,10 +14,16 @@ Requirements: 14.1, 14.2, 14.3, 14.4, 15.5, 16.1
 import streamlit as st
 import spacy
 from sentence_transformers import SentenceTransformer
-import language_tool_python
 import nltk
 import os
 from typing import Optional, Dict, Any
+
+# Try to import language_tool_python, but make it optional
+try:
+    import language_tool_python
+    LANGUAGE_TOOL_AVAILABLE = True
+except ImportError:
+    LANGUAGE_TOOL_AVAILABLE = False
 
 from utils.error_handler import (
     ModelLoadError,
@@ -34,7 +40,7 @@ _model_load_errors: Dict[str, str] = {}
 
 
 @st.cache_resource(show_spinner=False)
-def load_spacy_model(model_name: str = "en_core_web_md"):
+def load_spacy_model(model_name: str = "en_core_web_sm"):
     """
     Load and cache spaCy language model.
     
@@ -151,7 +157,7 @@ def load_language_tool(language: str = "en-US"):
         language: Language code for grammar checking
         
     Returns:
-        Loaded LanguageTool object
+        Loaded LanguageTool object, or None if not available
         
     Validates:
         - Requirements 14.3: Initialize LanguageTool locally
@@ -161,29 +167,20 @@ def load_language_tool(language: str = "en-US"):
     import time
     start_time = time.time()
     
+    if not LANGUAGE_TOOL_AVAILABLE:
+        log_warning("LanguageTool not available (language-tool-python not installed)", context="model_loader")
+        return None
+    
     try:
         tool = language_tool_python.LanguageTool(language)
         _model_load_times['language_tool'] = time.time() - start_time
         log_info(f"LanguageTool for '{language}' loaded in {_model_load_times['language_tool']:.2f}s", context="model_loader")
         return tool
     except Exception as e:
-        error_msg = (
-            f"Failed to load LanguageTool for '{language}'.\n\n"
-            f"Troubleshooting steps:\n"
-            f"  1. pip install language-tool-python --upgrade\n"
-            f"  2. Ensure Java is installed (required by LanguageTool)\n"
-            f"  3. Check if port 8081 is available\n"
-            f"  4. Try restarting the application"
-        )
-        _model_load_errors['language_tool'] = error_msg
-        log_error(e, context="load_language_tool", category=ErrorCategory.MODEL_LOADING)
-        st.error(error_msg)
-        raise ModelLoadError(
-            message=f"Failed to load LanguageTool: {str(e)}",
-            model_name="LanguageTool",
-            user_message="The grammar checking tool could not be loaded. Please check the troubleshooting steps.",
-            original_error=e
-        )
+        # Log warning but don't crash - grammar checking is optional
+        log_warning(f"LanguageTool unavailable: {str(e)}", context="model_loader")
+        _model_load_errors['language_tool'] = f"Grammar checking unavailable (requires Java): {str(e)}"
+        return None
 
 
 @st.cache_data(show_spinner=False)

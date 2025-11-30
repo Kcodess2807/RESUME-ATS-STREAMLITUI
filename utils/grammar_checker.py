@@ -4,9 +4,16 @@ Handles grammar and spelling checking for resume text using LanguageTool
 """
 
 import streamlit as st
-from typing import Dict, List, Tuple
-import language_tool_python
-from language_tool_python import Match
+from typing import Dict, List, Tuple, Optional
+
+# Try to import language_tool_python, but make it optional for cloud deployment
+try:
+    import language_tool_python
+    from language_tool_python import Match
+    LANGUAGE_TOOL_AVAILABLE = True
+except ImportError:
+    LANGUAGE_TOOL_AVAILABLE = False
+    Match = None  # type: ignore
 
 
 # Technical terms whitelist to avoid false positives
@@ -68,7 +75,7 @@ PROPER_NOUN_PATTERNS = {
 
 
 @st.cache_resource
-def load_grammar_checker(language: str = "en-US") -> language_tool_python.LanguageTool:
+def load_grammar_checker(language: str = "en-US") -> Optional[object]:
     """
     Load and cache LanguageTool for grammar checking.
     
@@ -76,29 +83,25 @@ def load_grammar_checker(language: str = "en-US") -> language_tool_python.Langua
         language: Language code for grammar checking (default: en-US)
         
     Returns:
-        Loaded LanguageTool object
-        
-    Raises:
-        Exception: If LanguageTool fails to load
+        Loaded LanguageTool object, or None if not available
         
     Validates:
         - Requirements 14.3: Initialize LanguageTool locally
         - Requirements 15.5: Provide troubleshooting steps on failure
     """
+    if not LANGUAGE_TOOL_AVAILABLE:
+        return None
+        
     try:
         tool = language_tool_python.LanguageTool(language)
         return tool
     except Exception as e:
-        error_msg = (
-            f"Failed to load LanguageTool for '{language}'.\n\n"
-            f"Troubleshooting steps:\n"
-            f"  1. pip install language-tool-python --upgrade\n"
-            f"  2. Ensure Java is installed (required by LanguageTool)\n"
-            f"  3. Check if port 8081 is available\n"
-            f"  4. Try restarting the application"
+        # Log warning but don't crash - grammar checking is optional
+        st.warning(
+            "Grammar checking is unavailable (requires Java). "
+            "Other features will work normally."
         )
-        st.error(error_msg)
-        raise
+        return None
 
 
 def is_technical_term(word: str) -> bool:
@@ -320,7 +323,7 @@ def _cached_grammar_check(text_hash: str, text: str, _language_tool) -> Dict:
 
 def check_grammar_and_spelling(
     text: str,
-    language_tool: language_tool_python.LanguageTool = None,
+    language_tool = None,
     use_cache: bool = True
 ) -> Dict:
     """
@@ -352,6 +355,20 @@ def check_grammar_and_spelling(
     # Load grammar checker if not provided
     if language_tool is None:
         language_tool = load_grammar_checker()
+    
+    # If LanguageTool is not available, return empty results
+    if language_tool is None:
+        return {
+            'total_errors': 0,
+            'critical_errors': [],
+            'moderate_errors': [],
+            'minor_errors': [],
+            'grammar_score': 100,
+            'penalty_applied': 0,
+            'error_free_percentage': 100.0,
+            'unavailable': True,
+            'message': 'Grammar checking unavailable (requires Java)'
+        }
     
     if use_cache:
         # Generate hash for caching

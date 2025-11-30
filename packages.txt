@@ -3,6 +3,4 @@
 
 # For python-magic (file type detection)
 libmagic1
-
-# For Java (required by LanguageTool) - OPTIONAL, grammar check is disabled
-# default-jre
+libmagic-dev
