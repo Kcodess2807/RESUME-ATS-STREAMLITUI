@@ -143,11 +143,32 @@ def require_authentication(redirect_message: str = "Please log in to access this
         
         if GOOGLE_AUTH_AVAILABLE:
             try:
+                # Check if client_secret.json exists, if not try to create from secrets
+                if not os.path.exists('client_secret.json'):
+                    if hasattr(st, 'secrets') and 'google_oauth' in st.secrets:
+                        # Create temporary client_secret.json from secrets
+                        secrets_dict = {
+                            "web": {
+                                "client_id": st.secrets['google_oauth']['client_id'],
+                                "client_secret": st.secrets['google_oauth']['client_secret'],
+                                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                                "token_uri": "https://oauth2.googleapis.com/token",
+                                "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                                "redirect_uris": [st.secrets['google_oauth'].get('redirect_uri', 'http://localhost:8501')]
+                            }
+                        }
+                        with open('client_secret.json', 'w') as f:
+                            json.dump(secrets_dict, f)
+                
+                redirect_uri = 'http://localhost:8501'
+                if hasattr(st, 'secrets') and 'google_oauth' in st.secrets:
+                    redirect_uri = st.secrets['google_oauth'].get('redirect_uri', 'http://localhost:8501')
+
                 authenticator = Authenticate(
                     secret_credentials_path='client_secret.json',
                     cookie_name='ats_scorer_auth',
                     cookie_key='ats_scorer_key_2024',
-                    redirect_uri='http://localhost:8501',
+                    redirect_uri=redirect_uri,
                 )
                 
                 # Check authentication status

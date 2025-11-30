@@ -303,7 +303,14 @@ def generate_pdf_report(analysis_results: Dict, user_info: Optional[Dict] = None
     _add_action_items_section(pdf, analysis_results)
     
     # Return PDF as bytes
-    return bytes(pdf.output())
+    try:
+        output = pdf.output()
+        if isinstance(output, str):
+            return output.encode('latin-1')
+        return bytes(output)
+    except Exception as e:
+        # Fallback for older fpdf versions
+        return pdf.output(dest='S').encode('latin-1')
 
 
 def _add_overall_score_section(pdf: ATSReportPDF, scores: Dict):

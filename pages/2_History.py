@@ -193,7 +193,7 @@ if not history:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if st.button("🚀 Analyze Your First Resume", use_container_width=True, type="primary"):
-            st.switch_page("pages/1_🎯_ATS_Scorer.py")
+            st.switch_page("pages/1_ATS_Scorer.py")
 else:
     # Display history
     st.markdown("### 📜 Recent Analyses")
