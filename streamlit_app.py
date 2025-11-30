@@ -294,7 +294,7 @@ st.markdown("""
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     if st.button("🚀 Start Analyzing Your Resume", use_container_width=True, type="primary"):
-        st.switch_page("pages/1_🎯_ATS_Scorer.py")
+        st.switch_page("pages/1_ATS_Scorer.py")
 
 st.markdown("---")
 
