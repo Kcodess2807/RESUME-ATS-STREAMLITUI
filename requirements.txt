@@ -1,11 +1,25 @@
-streamlit>=1.28.0
-streamlit-google-auth>=0.1.0
-pdfplumber>=0.10.0
-python-docx>=1.0.0
-spacy==3.7.4
-en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
-sentence-transformers>=2.2.0
-scikit-learn>=1.3.0
-nltk>=3.8.0
-fpdf2>=2.7.0
-python-magic>=0.4.27
+--prefer-binary
+
+streamlit==1.32.0
+streamlit-google-auth==0.1.0
+
+pdfplumber==0.9.0
+python-docx==1.0.1
+
+# spaCy - use 3.5.3 (has prebuilt wheels)
+spacy==3.5.3
+blis==0.7.10
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
+
+# Sentence Transformer (CPU)
+sentence-transformers==2.2.2
+torch==2.0.0+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+scikit-learn==1.2.0
+
+nltk==3.8.1
+
+fpdf2==2.7.0
+
+python-magic-bin==0.4.14
