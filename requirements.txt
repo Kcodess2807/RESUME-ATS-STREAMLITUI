@@ -1,8 +1,8 @@
 # ATS Resume Scorer - Streamlit Cloud Compatible
 # Python 3.10.x required (see runtime.txt)
 
-streamlit==1.32.0
-streamlit-google-auth>=1.1.8
+streamlit>=1.35.0
+# streamlit-google-auth removed in favor of native st.login()
 pyarrow>=14.0.0
 
 # File parsing
