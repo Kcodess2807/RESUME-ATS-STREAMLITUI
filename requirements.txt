@@ -1,21 +1,25 @@
---prefer-binary
---extra-index-url https://download.pytorch.org/whl/cpu
+# ATS Resume Scorer - Streamlit Cloud Compatible
+# Python 3.10.x required (see runtime.txt)
 
 streamlit==1.32.0
-streamlit-google-auth==1.1.8
 
+# File parsing
 pdfplumber==0.9.0
 python-docx==1.0.1
 
-# spaCy - use 3.7.x with prebuilt wheels (no compilation needed)
+# NLP - spaCy (model downloaded at runtime)
 spacy==3.7.4
-en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 
-# Sentence Transformer (CPU)
+# Sentence Transformers (CPU)
 sentence-transformers==2.2.2
-torch==2.0.0+cpu
+torch==2.1.0
 
+# ML & Data
 scikit-learn==1.2.0
 nltk==3.8.1
+
+# PDF generation
 fpdf2==2.7.0
-python-magic==0.4.27
+
+# File type detection (use python-magic-bin for cross-platform)
+python-magic-bin==0.4.14

@@ -39,6 +39,25 @@ _model_load_times: Dict[str, float] = {}
 _model_load_errors: Dict[str, str] = {}
 
 
+def _download_spacy_model(model_name: str) -> bool:
+    """
+    Download spaCy model at runtime (for Streamlit Cloud compatibility).
+    
+    Args:
+        model_name: Name of the spaCy model to download
+        
+    Returns:
+        bool: True if download succeeded
+    """
+    try:
+        log_info(f"Downloading spaCy model '{model_name}'...", context="model_loader")
+        spacy.cli.download(model_name)
+        return True
+    except Exception as e:
+        log_warning(f"Failed to download spaCy model '{model_name}': {e}", context="model_loader")
+        return False
+
+
 @st.cache_resource(show_spinner=False)
 def load_spacy_model(model_name: str = "en_core_web_sm"):
     """
@@ -46,6 +65,8 @@ def load_spacy_model(model_name: str = "en_core_web_sm"):
     
     Uses @st.cache_resource to ensure the model is loaded only once
     and reused across all sessions and reruns.
+    
+    For Streamlit Cloud: automatically downloads the model if not found.
     
     Args:
         model_name: Name of the spaCy model to load
@@ -64,38 +85,55 @@ def load_spacy_model(model_name: str = "en_core_web_sm"):
     import time
     start_time = time.time()
     
+    # Try to load the model
     try:
         nlp = spacy.load(model_name)
         _model_load_times['spacy'] = time.time() - start_time
         log_info(f"spaCy model '{model_name}' loaded in {_model_load_times['spacy']:.2f}s", context="model_loader")
         return nlp
-    except OSError as primary_error:
-        log_warning(f"Primary spaCy model '{model_name}' not found, trying fallback", context="model_loader")
-        
-        # Try smaller model as fallback
+    except OSError:
+        log_warning(f"spaCy model '{model_name}' not found, attempting download...", context="model_loader")
+    
+    # Model not found - try to download it (Streamlit Cloud compatible)
+    if _download_spacy_model(model_name):
         try:
-            nlp = spacy.load("en_core_web_sm")
+            nlp = spacy.load(model_name)
             _model_load_times['spacy'] = time.time() - start_time
-            log_info(f"spaCy fallback model 'en_core_web_sm' loaded in {_model_load_times['spacy']:.2f}s", context="model_loader")
+            log_info(f"spaCy model '{model_name}' downloaded and loaded in {_model_load_times['spacy']:.2f}s", context="model_loader")
             return nlp
-        except OSError as fallback_error:
-            error_msg = (
-                f"spaCy model not found. Please run one of the following commands:\n"
-                f"  python -m spacy download {model_name}\n"
-                f"  python -m spacy download en_core_web_sm\n\n"
-                f"If the issue persists, try:\n"
-                f"  pip install spacy --upgrade\n"
-                f"  pip install {model_name}"
-            )
-            _model_load_errors['spacy'] = error_msg
-            log_error(fallback_error, context="load_spacy_model", category=ErrorCategory.MODEL_LOADING)
-            st.error(error_msg)
-            raise ModelLoadError(
-                message=f"Failed to load spaCy model: {str(fallback_error)}",
-                model_name=model_name,
-                user_message="The language processing model could not be loaded. Please check the troubleshooting steps.",
-                original_error=fallback_error
-            )
+        except OSError:
+            pass
+    
+    # Try fallback to en_core_web_sm
+    fallback_model = "en_core_web_sm"
+    if model_name != fallback_model:
+        log_warning(f"Trying fallback model '{fallback_model}'", context="model_loader")
+        if _download_spacy_model(fallback_model):
+            try:
+                nlp = spacy.load(fallback_model)
+                _model_load_times['spacy'] = time.time() - start_time
+                log_info(f"spaCy fallback model '{fallback_model}' loaded in {_model_load_times['spacy']:.2f}s", context="model_loader")
+                return nlp
+            except OSError:
+                pass
+    
+    # All attempts failed
+    error_msg = (
+        f"spaCy model could not be loaded or downloaded.\n\n"
+        f"For local development, run:\n"
+        f"  python -m spacy download {model_name}\n\n"
+        f"If the issue persists, try:\n"
+        f"  pip install spacy --upgrade"
+    )
+    _model_load_errors['spacy'] = error_msg
+    log_error(Exception(error_msg), context="load_spacy_model", category=ErrorCategory.MODEL_LOADING)
+    st.error(error_msg)
+    raise ModelLoadError(
+        message=f"Failed to load spaCy model after download attempts",
+        model_name=model_name,
+        user_message="The language processing model could not be loaded. Please check the troubleshooting steps.",
+        original_error=None
+    )
 
 
 @st.cache_resource(show_spinner=False)
