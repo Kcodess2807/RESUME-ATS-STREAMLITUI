@@ -167,10 +167,11 @@ def require_authentication(redirect_message: str = "Please log in to access this
                 if hasattr(st, 'secrets') and 'google_oauth' in st.secrets:
                     redirect_uri = st.secrets['google_oauth'].get('redirect_uri', 'http://localhost:8501')
                 
-                # Handle Streamlit Cloud's internal routing if needed
-                # If we are on a sub-page or internal route, the base URL should still be the redirect target
-                if '/~/+/' in redirect_uri:
-                    redirect_uri = redirect_uri.split('/~/+/')[0]
+                # Ensure redirect_uri is clean (no paths)
+                if redirect_uri.count('/') > 2:
+                    # Keep only scheme://domain
+                    parts = redirect_uri.split('/')
+                    redirect_uri = f"{parts[0]}//{parts[2]}"
                 
                 print(f"DEBUG: Using Google Auth Redirect URI: {redirect_uri}")
 
