@@ -72,20 +72,49 @@ def require_authentication(redirect_message: str = "Please log in to access this
     </div>
     """, unsafe_allow_html=True)
     
-    col1, col2 = st.columns(2)
+    # Check if Google OAuth is properly configured
+    google_oauth_configured = _is_google_oauth_configured()
     
-    with col1:
-        # Google Sign-In (Native)
-        if st.button("🔐 Log in with Google", use_container_width=True, type="primary"):
-            st.login()
-            
-    with col2:
-        # Guest Login
-        if st.button("👤 Continue as Guest", use_container_width=True):
+    if google_oauth_configured:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Google Sign-In (Native)
+            if st.button("🔐 Log in with Google", use_container_width=True, type="primary"):
+                st.login()
+                
+        with col2:
+            # Guest Login
+            if st.button("👤 Continue as Guest", use_container_width=True):
+                login_as_guest()
+                st.rerun()
+    else:
+        # Only show guest login when OAuth is not configured
+        st.info("💡 Google OAuth is not configured. You can continue as a guest.")
+        if st.button("👤 Continue as Guest", use_container_width=True, type="primary"):
             login_as_guest()
             st.rerun()
     
     st.stop()
+
+
+def _is_google_oauth_configured() -> bool:
+    """Check if Google OAuth credentials are properly configured."""
+    try:
+        # Check Streamlit's native auth format: [auth.google]
+        if hasattr(st, 'secrets') and 'auth' in st.secrets:
+            auth_config = st.secrets.auth
+            if 'google' in auth_config:
+                client_id = auth_config.google.get('client_id', '')
+                client_secret = auth_config.google.get('client_secret', '')
+                
+                # Check for placeholder values
+                if client_id and client_secret:
+                    if 'YOUR_' not in client_id and 'YOUR_' not in client_secret:
+                        return True
+        return False
+    except Exception:
+        return False
 
 
 def display_user_info(location: str = 'sidebar'):
