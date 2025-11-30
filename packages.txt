@@ -1,6 +1,2 @@
-# System packages required for the app
-# These are installed via apt-get on Streamlit Cloud
-
-# For python-magic (file type detection)
 libmagic1
 libmagic-dev
