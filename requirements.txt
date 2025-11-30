@@ -1,27 +1,11 @@
-# Core
 streamlit>=1.28.0
-
-# Authentication
 streamlit-google-auth>=0.1.0
-
-# File Processing
 pdfplumber>=0.10.0
 python-docx>=1.0.0
-
-# NLP (lightweight)
-spacy>=3.7.0
-# SpaCy model - use small model for cloud deployment (less memory)
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
-
-# Embeddings
+spacy==3.7.4
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 sentence-transformers>=2.2.0
-
-# ML
 scikit-learn>=1.3.0
 nltk>=3.8.0
-
-# PDF Reports
 fpdf2>=2.7.0
-
-# File detection
 python-magic>=0.4.27
