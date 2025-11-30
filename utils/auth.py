@@ -30,7 +30,7 @@ def login_as_guest():
 def logout():
     """Log out current user."""
     # Logout from Google
-    if st.experimental_user.is_logged_in:
+    if hasattr(st, 'logout'):
         st.logout()
     
     # Clear guest session
@@ -42,7 +42,16 @@ def logout():
 def is_authenticated() -> bool:
     """Check if user is authenticated (either via Google or Guest)."""
     init_session_state()
-    return st.experimental_user.is_logged_in or st.session_state.guest_authenticated
+    # Check for Streamlit native auth (st.experimental_user)
+    # Note: In some versions/environments, is_logged_in might not be directly available
+    # or might be False locally.
+    try:
+        if hasattr(st, 'experimental_user') and st.experimental_user.get('email'):
+            return True
+    except Exception:
+        pass
+        
+    return st.session_state.guest_authenticated
 
 
 def require_authentication(redirect_message: str = "Please log in to access this page."):
@@ -87,9 +96,16 @@ def display_user_info(location: str = 'sidebar'):
         return
     
     # Determine user details
-    if st.experimental_user.is_logged_in:
-        name = st.experimental_user.name or "Google User"
-        email = st.experimental_user.email
+    google_email = None
+    try:
+        if hasattr(st, 'experimental_user'):
+            google_email = st.experimental_user.get('email')
+    except Exception:
+        pass
+
+    if google_email:
+        name = st.experimental_user.get('name', 'Google User')
+        email = google_email
         auth_type = "Google"
         # Try to get avatar if available (not always present in experimental_user)
         picture = None 
