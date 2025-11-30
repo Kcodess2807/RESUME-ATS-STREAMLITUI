@@ -8,11 +8,12 @@ pdfplumber==0.9.0
 python-docx==1.0.1
 
 # NLP - spaCy (model downloaded at runtime)
-spacy==3.7.4
+spacy>=3.7.4
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1.tar.gz#egg=en_core_web_sm
 
 # Sentence Transformers (CPU)
-sentence-transformers==2.2.2
-torch==2.1.0
+sentence-transformers>=2.2.2
+torch>=2.1.0
 
 # ML & Data
 scikit-learn==1.2.0
@@ -21,5 +22,5 @@ nltk==3.8.1
 # PDF generation
 fpdf2==2.7.0
 
-# File type detection (use python-magic-bin for cross-platform)
-python-magic-bin==0.4.14
+# File type detection
+python-magic==0.4.27
