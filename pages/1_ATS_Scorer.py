@@ -233,13 +233,21 @@ st.markdown("---")
 # File Upload Section
 col1, col2 = st.columns(2)
 
+def clear_previous_results():
+    """Clear previous analysis results when a new file is uploaded."""
+    if 'analysis_results' in st.session_state:
+        del st.session_state['analysis_results']
+    if 'analysis_complete' in st.session_state:
+        del st.session_state['analysis_complete']
+
 with col1:
     st.markdown("### 📄 Upload Resume")
     resume_file = st.file_uploader(
         "Choose your resume file",
         type=['pdf', 'doc', 'docx'],
         help="Supported formats: PDF, DOC, DOCX (Max 5MB)",
-        key="resume_upload"
+        key="resume_upload",
+        on_change=clear_previous_results
     )
     
     if resume_file:
@@ -820,11 +828,19 @@ if resume_file:
             # Display results or error
             if results['success']:
                 st.success("✅ Analysis complete!")
+                # Store results in session state for persistence across reruns
+                st.session_state['analysis_results'] = results
+                st.session_state['analysis_complete'] = True
                 display_results(results)
             else:
                 # Requirements: 15.4 - User-friendly error messages
                 st.error(f"❌ {results['error']}")
                 st.info("Please check your file and try again. If the problem persists, try converting your resume to a different format (PDF or DOCX).")
+
+# Display previous results if available (persists across reruns for downloads)
+elif 'analysis_results' in st.session_state and st.session_state.get('analysis_complete'):
+    st.success("✅ Analysis complete! (Previous results)")
+    display_results(st.session_state['analysis_results'])
 
 else:
     # Instructions when no file is uploaded

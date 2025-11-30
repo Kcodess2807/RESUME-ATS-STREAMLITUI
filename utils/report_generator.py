@@ -304,13 +304,26 @@ def generate_pdf_report(analysis_results: Dict, user_info: Optional[Dict] = None
     
     # Return PDF as bytes
     try:
+        # fpdf2 returns bytearray, convert to bytes
         output = pdf.output()
-        if isinstance(output, str):
+        if isinstance(output, bytearray):
+            return bytes(output)
+        elif isinstance(output, bytes):
+            return output
+        elif isinstance(output, str):
             return output.encode('latin-1')
-        return bytes(output)
+        else:
+            return bytes(output)
     except Exception as e:
-        # Fallback for older fpdf versions
-        return pdf.output(dest='S').encode('latin-1')
+        # Fallback: try different output methods
+        try:
+            return bytes(pdf.output())
+        except Exception:
+            # Last resort fallback
+            import io
+            buffer = io.BytesIO()
+            pdf.output(buffer)
+            return buffer.getvalue()
 
 
 def _add_overall_score_section(pdf: ATSReportPDF, scores: Dict):
