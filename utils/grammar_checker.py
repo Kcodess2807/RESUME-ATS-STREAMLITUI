@@ -117,7 +117,7 @@ def is_technical_term(word: str) -> bool:
     return word.lower() in TECHNICAL_TERMS_WHITELIST
 
 
-def categorize_error(error: Match) -> str:
+def categorize_error(error) -> str:
     """
     Categorize a grammar error as critical, moderate, or minor.
     
@@ -179,7 +179,7 @@ def categorize_error(error: Match) -> str:
     return "minor"
 
 
-def filter_technical_term_errors(errors: List[Match], text: str) -> List[Match]:
+def filter_technical_term_errors(errors: List, text: str) -> List:
     """
     Filter out errors related to technical terms in the whitelist.
     
@@ -207,7 +207,7 @@ def filter_technical_term_errors(errors: List[Match], text: str) -> List[Match]:
     return filtered_errors
 
 
-def extract_error_context(text: str, error: Match, context_chars: int = 50) -> str:
+def extract_error_context(text: str, error, context_chars: int = 50) -> str:
     """
     Extract context around an error for display.
     
@@ -235,7 +235,7 @@ def extract_error_context(text: str, error: Match, context_chars: int = 50) -> s
 
 def _perform_grammar_check(
     text: str,
-    language_tool: language_tool_python.LanguageTool
+    language_tool
 ) -> Dict:
     """
     Internal function to perform grammar check.
