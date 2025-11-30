@@ -239,6 +239,8 @@ def clear_previous_results():
         del st.session_state['analysis_results']
     if 'analysis_complete' in st.session_state:
         del st.session_state['analysis_complete']
+    if 'download_data' in st.session_state:
+        del st.session_state['download_data']
 
 with col1:
     st.markdown("### 📄 Upload Resume")
@@ -715,77 +717,112 @@ def display_results(results):
     scores = results['scores']
     overall_score = scores['overall_score']
     
+    # Pre-generate all download data to avoid regeneration on rerun
+    # Store in session state if not already there
+    if 'download_data' not in st.session_state:
+        st.session_state['download_data'] = {}
+    
+    # Generate PDF bytes
+    try:
+        if 'pdf_bytes' not in st.session_state['download_data']:
+            st.session_state['download_data']['pdf_bytes'] = generate_pdf_report(results)
+        pdf_bytes = st.session_state['download_data']['pdf_bytes']
+        pdf_available = True
+    except Exception as e:
+        pdf_available = False
+        print(f"PDF generation error: {e}")
+    
+    # Generate summary text
+    if 'summary_text' not in st.session_state['download_data']:
+        st.session_state['download_data']['summary_text'] = generate_summary_text(results)
+    summary_text = st.session_state['download_data']['summary_text']
+    
+    # Generate action checklist
+    if 'action_checklist' not in st.session_state['download_data']:
+        st.session_state['download_data']['action_checklist'] = generate_action_items_checklist(results)
+    action_checklist = st.session_state['download_data']['action_checklist']
+    
+    # Generate quick actions
+    if 'quick_actions' not in st.session_state['download_data']:
+        action_items = []
+        for error in results['grammar_results'].get('critical_errors', [])[:2]:
+            action_items.append(("Critical", f"Fix: {error['message'][:100]}"))
+        if results['location_results']['privacy_risk'] == 'high':
+            action_items.append(("Critical", "Remove detailed location information from resume"))
+        for skill in results['skill_validation'].get('unvalidated_skills', [])[:2]:
+            action_items.append(("High", f"Add project evidence for skill: {skill}"))
+        if results['jd_comparison']:
+            for kw in results['jd_comparison'].get('missing_keywords', [])[:2]:
+                action_items.append(("Medium", f"Consider adding keyword: {kw}"))
+        
+        action_text = "ATS Resume Quick Actions\n" + "=" * 25 + "\n\n"
+        action_text += "\n".join([f"[{p}] {i}" for p, i in action_items])
+        st.session_state['download_data']['quick_actions'] = action_text
+    quick_actions_text = st.session_state['download_data']['quick_actions']
+    
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         # PDF Report Download
-        # Requirements: 13.1, 13.2, 13.3 - Generate comprehensive PDF report
-        try:
-            pdf_bytes = generate_pdf_report(results)
+        if pdf_available:
             st.download_button(
                 "📑 Download PDF Report",
                 data=pdf_bytes,
                 file_name="ats_resume_report.pdf",
                 mime="application/pdf",
                 use_container_width=True,
-                type="primary"
+                type="primary",
+                key="download_pdf_report"
             )
-        except Exception as e:
+        else:
             st.warning("PDF generation unavailable")
-            print(f"PDF generation error: {e}")
     
     with col2:
         # Summary text download
-        summary_text = generate_summary_text(results)
         st.download_button(
             "📄 Download Summary",
             data=summary_text,
             file_name="ats_summary.txt",
             mime="text/plain",
-            use_container_width=True
+            use_container_width=True,
+            key="download_summary"
         )
     
     with col3:
         # Action items checklist download
-        # Requirements: 13.4 - Generate checklist document with prioritized recommendations
-        action_checklist = generate_action_items_checklist(results)
         st.download_button(
             "📋 Download Checklist",
             data=action_checklist,
             file_name="action_items_checklist.txt",
             mime="text/plain",
-            use_container_width=True
+            use_container_width=True,
+            key="download_checklist"
         )
     
     with col4:
-        # Quick action items (legacy format)
-        action_items = []
-        for error in results['grammar_results'].get('critical_errors', [])[:2]:
-            action_items.append(("🔴 Critical", f"Fix: {error['message'][:100]}"))
-        if results['location_results']['privacy_risk'] == 'high':
-            action_items.append(("🔴 Critical", "Remove detailed location information from resume"))
-        for skill in results['skill_validation'].get('unvalidated_skills', [])[:2]:
-            action_items.append(("🟡 High", f"Add project evidence for skill: {skill}"))
-        if results['jd_comparison']:
-            for kw in results['jd_comparison'].get('missing_keywords', [])[:2]:
-                action_items.append(("🟢 Medium", f"Consider adding keyword: {kw}"))
-        
-        action_text = "ATS Resume Quick Actions\n" + "=" * 25 + "\n\n"
-        action_text += "\n".join([f"[{p}] {i}" for p, i in action_items])
+        # Quick action items
         st.download_button(
             "⚡ Quick Actions",
-            data=action_text,
+            data=quick_actions_text,
             file_name="quick_actions.txt",
             mime="text/plain",
-            use_container_width=True
+            use_container_width=True,
+            key="download_quick_actions"
         )
 
+
+# Check if we have previous results to display (for download button reruns)
+has_previous_results = 'analysis_results' in st.session_state and st.session_state.get('analysis_complete')
 
 # Analysis Button
 if resume_file:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if st.button("🚀 Analyze Resume", use_container_width=True, type="primary"):
+            # Clear any previous download data for fresh analysis
+            if 'download_data' in st.session_state:
+                del st.session_state['download_data']
+            
             # Initialize progress tracking
             # Requirements: 4.1 - Progress initialization at zero percent
             initialize_progress()
@@ -836,10 +873,15 @@ if resume_file:
                 # Requirements: 15.4 - User-friendly error messages
                 st.error(f"❌ {results['error']}")
                 st.info("Please check your file and try again. If the problem persists, try converting your resume to a different format (PDF or DOCX).")
+        
+        # Display previous results if available (persists across reruns for downloads)
+        elif has_previous_results:
+            st.success("✅ Analysis results ready")
+            display_results(st.session_state['analysis_results'])
 
-# Display previous results if available (persists across reruns for downloads)
-elif 'analysis_results' in st.session_state and st.session_state.get('analysis_complete'):
-    st.success("✅ Analysis complete! (Previous results)")
+# Display previous results even without file (edge case)
+elif has_previous_results:
+    st.success("✅ Analysis results (upload a new file to re-analyze)")
     display_results(st.session_state['analysis_results'])
 
 else:
