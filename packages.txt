@@ -1,0 +1,8 @@
+# System packages required for the app
+# These are installed via apt-get on Streamlit Cloud
+
+# For python-magic (file type detection)
+libmagic1
+
+# For Java (required by LanguageTool) - OPTIONAL, grammar check is disabled
+# default-jre

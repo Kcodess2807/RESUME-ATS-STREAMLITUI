@@ -1,22 +1,14 @@
 [theme]
-# Primary color matching our CSS variables
 primaryColor = "#4F46E5"
 backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F9FAFB"
-textColor = "#1F2937"
+secondaryBackgroundColor = "#F8FAFC"
+textColor = "#1E293B"
 font = "sans serif"
 
 [server]
-headless = true
-port = 8501
-# Note: enableCORS and enableXsrfProtection are mutually exclusive
-# Using XSRF protection for security
+maxUploadSize = 10
 enableXsrfProtection = true
+enableCORS = false
 
 [browser]
 gatherUsageStats = false
-
-[client]
-# Enable smooth animations
-showSidebarNavigation = true
-toolbarMode = "minimal"

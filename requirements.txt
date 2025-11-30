@@ -15,13 +15,9 @@ python-docx>=1.0.0
 
 # NLP and Text Processing
 spacy>=3.7.0
-nltk>=3.8.0
 
 # Embeddings and Semantic Analysis
 sentence-transformers>=2.2.0
-
-# Grammar Checking
-language-tool-python>=2.7.0
 
 # Machine Learning
 scikit-learn>=1.3.0
@@ -32,3 +28,6 @@ reportlab>=4.0.0
 
 # Utilities
 python-magic>=0.4.27
+
+# SpaCy model - downloaded during setup
+# Run: python -m spacy download en_core_web_sm

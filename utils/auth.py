@@ -2,12 +2,14 @@
 Authentication Module for ATS Resume Scorer
 
 Supports Google OAuth and Guest login.
+Works with both local development and Streamlit Cloud.
 """
 
 import streamlit as st
 from typing import Optional
 from datetime import datetime
 import json
+import os
 
 # Try to import Google OAuth
 try:
@@ -15,6 +17,36 @@ try:
     GOOGLE_AUTH_AVAILABLE = True
 except ImportError:
     GOOGLE_AUTH_AVAILABLE = False
+
+
+def get_google_credentials():
+    """Get Google OAuth credentials from secrets or local file."""
+    # Try Streamlit secrets first (for cloud deployment)
+    try:
+        if hasattr(st, 'secrets') and 'google_oauth' in st.secrets:
+            return {
+                'client_id': st.secrets['google_oauth']['client_id'],
+                'client_secret': st.secrets['google_oauth']['client_secret'],
+                'redirect_uri': st.secrets['google_oauth'].get('redirect_uri', 'http://localhost:8501')
+            }
+    except Exception:
+        pass
+    
+    # Fall back to local client_secret.json
+    try:
+        if os.path.exists('client_secret.json'):
+            with open('client_secret.json', 'r') as f:
+                creds = json.load(f)
+                web = creds.get('web', {})
+                return {
+                    'client_id': web.get('client_id'),
+                    'client_secret': web.get('client_secret'),
+                    'redirect_uri': 'http://localhost:8501'
+                }
+    except Exception:
+        pass
+    
+    return None
 
 
 def init_session_state():

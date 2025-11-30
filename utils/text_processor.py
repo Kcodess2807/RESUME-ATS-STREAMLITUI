@@ -15,34 +15,55 @@ import string
 
 
 @st.cache_resource
-def load_spacy_model(model_name: str = "en_core_web_md"):
+def load_spacy_model(model_name: str = "en_core_web_sm"):
     """
     Load and cache spaCy language model.
+    Auto-downloads if not available (for Streamlit Cloud).
     
     Args:
         model_name: Name of the spaCy model to load
         
     Returns:
         Loaded spaCy Language object
-        
-    Validates:
-        - Requirements 14.1: Load spaCy model from local storage
-        - Requirements 14.4: Cache models in memory
     """
+    import subprocess
+    import sys
+    
+    def download_model(name):
+        """Download spaCy model."""
+        try:
+            subprocess.check_call([sys.executable, "-m", "spacy", "download", name])
+            return True
+        except Exception:
+            return False
+    
+    # Try to load the model
     try:
         nlp = spacy.load(model_name)
         return nlp
     except OSError:
+        # Model not found, try to download it
+        st.info(f"Downloading spaCy model: {model_name}...")
+        if download_model(model_name):
+            try:
+                nlp = spacy.load(model_name)
+                st.success(f"Model {model_name} loaded successfully!")
+                return nlp
+            except Exception:
+                pass
+        
         # Try smaller model as fallback
-        try:
-            nlp = spacy.load("en_core_web_sm")
-            st.warning(f"Could not load {model_name}, using en_core_web_sm instead")
-            return nlp
-        except OSError:
-            st.error(
-                f"spaCy model not found. Please run: python -m spacy download {model_name}"
-            )
-            raise
+        fallback = "en_core_web_sm"
+        st.warning(f"Trying fallback model: {fallback}")
+        if download_model(fallback):
+            try:
+                nlp = spacy.load(fallback)
+                return nlp
+            except Exception:
+                pass
+        
+        st.error("Could not load spaCy model. Please try again.")
+        raise OSError(f"Failed to load spaCy model: {model_name}")
 
 
 # Section headers patterns for resume parsing
