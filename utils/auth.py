@@ -15,7 +15,11 @@ import os
 try:
     from streamlit_google_auth import Authenticate
     GOOGLE_AUTH_AVAILABLE = True
-except ImportError:
+except ImportError as e:
+    print(f"Failed to import streamlit_google_auth: {e}")
+    GOOGLE_AUTH_AVAILABLE = False
+except Exception as e:
+    print(f"Unexpected error importing streamlit_google_auth: {e}")
     GOOGLE_AUTH_AVAILABLE = False
 
 
