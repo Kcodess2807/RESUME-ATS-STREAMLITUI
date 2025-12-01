@@ -31,3 +31,6 @@ fpdf2==2.7.0
 
 # File type detection
 python-magic==0.4.27
+
+# Grammar Checking
+language-tool-python>=2.7.1
