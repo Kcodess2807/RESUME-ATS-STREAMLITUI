@@ -31,7 +31,10 @@ def logout():
     """Log out current user."""
     # Logout from Google
     if hasattr(st, 'logout'):
-        st.logout()
+        try:
+            st.logout()
+        except Exception:
+            pass
     
     # Clear guest session
     st.session_state.guest_authenticated = False
@@ -42,11 +45,17 @@ def logout():
 def is_authenticated() -> bool:
     """Check if user is authenticated (either via Google or Guest)."""
     init_session_state()
-    # Check for Streamlit native auth (st.experimental_user)
-    # Note: In some versions/environments, is_logged_in might not be directly available
-    # or might be False locally.
+    
+    # Check for Streamlit native auth
     try:
         if hasattr(st, 'experimental_user') and st.experimental_user.get('email'):
+            return True
+    except Exception:
+        pass
+    
+    # Check for newer st.user API
+    try:
+        if hasattr(st, 'user') and st.user.get('email'):
             return True
     except Exception:
         pass
@@ -81,7 +90,15 @@ def require_authentication(redirect_message: str = "Please log in to access this
         with col1:
             # Google Sign-In (Native)
             if st.button("🔐 Log in with Google", use_container_width=True, type="primary"):
-                st.login()
+                try:
+                    # Try to login with explicit provider
+                    st.login(provider="google")
+                except Exception as e:
+                    error_msg = str(e)
+                    st.error("⚠️ Google login is not available at the moment.")
+                    st.caption("Please use Guest login to continue.")
+                    # Log the actual error for debugging
+                    st.exception(e)
                 
         with col2:
             # Guest Login
@@ -101,19 +118,44 @@ def require_authentication(redirect_message: str = "Please log in to access this
 def _is_google_oauth_configured() -> bool:
     """Check if Google OAuth credentials are properly configured."""
     try:
-        # Check Streamlit's native auth format: [auth.google]
-        if hasattr(st, 'secrets') and 'auth' in st.secrets:
-            auth_config = st.secrets.auth
-            if 'google' in auth_config:
-                client_id = auth_config.google.get('client_id', '')
-                client_secret = auth_config.google.get('client_secret', '')
-                
-                # Check for placeholder values
-                if client_id and client_secret:
-                    if 'YOUR_' not in client_id and 'YOUR_' not in client_secret:
-                        return True
-        return False
-    except Exception:
+        # Check if secrets exist
+        if not hasattr(st, 'secrets'):
+            return False
+            
+        # Check for [auth] section
+        if 'auth' not in st.secrets:
+            return False
+            
+        auth_config = st.secrets['auth']
+        
+        # Check for cookie_secret (required by Streamlit)
+        cookie_secret = auth_config.get('cookie_secret', '')
+        if not cookie_secret or len(cookie_secret) < 20:
+            return False
+        
+        # Check for [auth.google] nested section
+        if 'google' not in auth_config:
+            return False
+            
+        google_config = auth_config['google']
+        
+        # Verify all required fields are present
+        required_fields = ['client_id', 'client_secret']
+        for field in required_fields:
+            value = google_config.get(field, '')
+            if not value or 'YOUR_' in value or 'your-' in value.lower():
+                return False
+        
+        # Additional validation: check if client_id looks valid
+        client_id = google_config.get('client_id', '')
+        if not client_id.endswith('.apps.googleusercontent.com'):
+            return False
+            
+        return True
+        
+    except Exception as e:
+        # Log configuration check failure
+        print(f"OAuth config check failed: {e}")
         return False
 
 
@@ -126,17 +168,29 @@ def display_user_info(location: str = 'sidebar'):
     
     # Determine user details
     google_email = None
+    
+    # Try newer st.user API first
     try:
-        if hasattr(st, 'experimental_user'):
-            google_email = st.experimental_user.get('email')
+        if hasattr(st, 'user'):
+            google_email = st.user.get('email')
     except Exception:
         pass
+    
+    # Fallback to experimental_user
+    if not google_email:
+        try:
+            if hasattr(st, 'experimental_user'):
+                google_email = st.experimental_user.get('email')
+        except Exception:
+            pass
 
     if google_email:
-        name = st.experimental_user.get('name', 'Google User')
+        try:
+            name = st.user.get('name', 'Google User') if hasattr(st, 'user') else st.experimental_user.get('name', 'Google User')
+        except:
+            name = 'Google User'
         email = google_email
         auth_type = "Google"
-        # Try to get avatar if available (not always present in experimental_user)
         picture = None 
     else:
         name = st.session_state.guest_name
