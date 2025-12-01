@@ -10,6 +10,7 @@ Requirements: 2.3
 import streamlit as st
 from datetime import datetime
 from utils.auth import require_authentication, display_user_info, logout_button
+from utils.database import get_user_history, delete_history_entry, clear_user_history, is_database_configured
 
 # Configure page
 st.set_page_config(
@@ -161,8 +162,8 @@ with st.sidebar:
     
     st.markdown("## 📈 Quick Stats")
     
-    # Get history from session state
-    history = st.session_state.get('analysis_history', [])
+    # Get history from database (falls back to session state)
+    history = get_user_history(limit=20)
     
     if history:
         st.metric("Total Analyses", len(history))
@@ -172,12 +173,8 @@ with st.sidebar:
     else:
         st.info("No analyses yet")
 
-# Initialize history in session state if not exists
-if 'analysis_history' not in st.session_state:
-    st.session_state.analysis_history = []
-
-# Main content
-history = st.session_state.analysis_history
+# Get history from database
+history = get_user_history(limit=20)
 
 if not history:
     # Empty state

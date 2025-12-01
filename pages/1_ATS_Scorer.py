@@ -71,43 +71,12 @@ from utils.error_handler import (
     AnalysisResult,
     format_error_for_display
 )
-from datetime import datetime
+from utils.database import save_analysis_to_db
 
 
 def save_to_history(results: dict, filename: str):
-    """
-    Save analysis results to session history.
-    
-    Args:
-        results: Complete analysis results dictionary
-        filename: Name of the analyzed file
-    """
-    # Initialize history if not exists
-    if 'analysis_history' not in st.session_state:
-        st.session_state.analysis_history = []
-    
-    # Extract scores for history entry
-    scores = results.get('scores', {})
-    
-    history_entry = {
-        'filename': filename,
-        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M"),
-        'overall_score': scores.get('overall_score', 0),
-        'component_scores': {
-            'formatting_score': scores.get('formatting_score', 0),
-            'keywords_score': scores.get('keywords_score', 0),
-            'content_score': scores.get('content_score', 0),
-            'skill_validation_score': scores.get('skill_validation_score', 0),
-            'ats_compatibility_score': scores.get('ats_compatibility_score', 0),
-        },
-        'jd_match': results.get('jd_comparison', {}).get('match_percentage', None) if results.get('jd_comparison') else None,
-    }
-    
-    # Add to history (most recent first)
-    st.session_state.analysis_history.insert(0, history_entry)
-    
-    # Keep only last 20 analyses
-    st.session_state.analysis_history = st.session_state.analysis_history[:20]
+    """Save analysis results to database (with session fallback)."""
+    save_analysis_to_db(results, filename)
 
 
 # Configure page
