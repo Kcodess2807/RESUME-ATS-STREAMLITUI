@@ -28,6 +28,24 @@ def load_css():
 
 st.markdown(load_css(), unsafe_allow_html=True)
 
+# Hide GitHub icon and Streamlit branding
+st.markdown("""
+<style>
+    /* Hide GitHub icon */
+    .stActionButton[data-testid="stActionButton"] {
+        display: none !important;
+    }
+    /* Hide "Made with Streamlit" footer */
+    footer {
+        visibility: hidden;
+    }
+    /* Hide hamburger menu items related to source */
+    [data-testid="stToolbar"] {
+        display: none !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Additional page-specific CSS for landing page
 st.markdown("""
 <style>
