@@ -8,6 +8,7 @@ Falls back to session state if database is not configured.
 import streamlit as st
 from datetime import datetime
 import json
+import os
 from typing import Optional, List, Dict, Any
 
 # Try to import supabase
@@ -17,6 +18,13 @@ try:
 except ImportError:
     SUPABASE_AVAILABLE = False
 
+# Try to load environment variables
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 
 def get_supabase_client() -> Optional[Any]:
     """Get Supabase client if configured."""
@@ -24,13 +32,19 @@ def get_supabase_client() -> Optional[Any]:
         return None
     
     try:
-        url = st.secrets.get("supabase", {}).get("url")
-        key = st.secrets.get("supabase", {}).get("key")
+        # Try environment variables first
+        url = os.getenv("SUPABASE_URL")
+        key = os.getenv("SUPABASE_KEY")
+        
+        # Fall back to st.secrets if env vars not found
+        if not url or not key:
+            url = st.secrets.get("supabase", {}).get("url")
+            key = st.secrets.get("supabase", {}).get("key")
         
         if url and key:
             return create_client(url, key)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"Supabase client creation error: {e}")
     
     return None
 
