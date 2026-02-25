@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from app.config.auth import require_authentication, display_user_info, logout_button
+# Authentication removed
 from app.config.database import get_user_history, delete_history_entry, clear_user_history, is_database_configured
 
 st.set_page_config(
@@ -135,9 +135,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Require authentication
-require_authentication("Please log in to view your analysis history.")
-
 # Header
 st.markdown("""
 <div class="history-header">
@@ -148,12 +145,6 @@ st.markdown("""
 
 # Sidebar
 with st.sidebar:
-    st.markdown("## 👤 User Profile")
-    display_user_info(location='sidebar')
-    logout_button(location='sidebar')
-    
-    st.markdown("---")
-    
     st.markdown("## 📈 Quick Stats")
     
     # Get history from database (falls back to session state)

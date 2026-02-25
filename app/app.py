@@ -489,23 +489,9 @@ with st.sidebar:
     st.markdown("## 📖 Quick Guide")
     st.markdown("""
     1. Click **Start Analyzing** above
-    2. Log in with your credentials
-    3. Upload your resume (PDF/DOC/DOCX)
-    4. Optionally upload a job description
-    5. Get instant feedback and recommendations
-    """)
-    
-    st.markdown("---")
-    
-    st.markdown("## 🔐 Demo Credentials")
-    st.info("""
-    **Username:** demo_user  
-    **Password:** demo123
-    
-    or
-    
-    **Username:** test_user  
-    **Password:** test123
+    2. Upload your resume (PDF/DOC/DOCX)
+    3. Optionally upload a job description
+    4. Get instant feedback and recommendations
     """)
     
     st.markdown("---")

@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from app.config.auth import require_authentication, display_user_info, logout_button
+# Authentication removed
 from app.utils.progress import (
     initialize_progress,
     update_progress,
@@ -196,24 +196,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Require authentication for this page
-# Requirements: 2.1 - Unauthenticated access protection
-require_authentication("Please log in to access the ATS Resume Scorer.")
-
 # Page Header
 st.title("🎯 ATS Resume Scorer")
 st.markdown("Upload your resume and optionally a job description for comprehensive analysis.")
 
-# Display user info and logout in sidebar
-# Requirements: 2.3 - Session information display
-# Requirements: 2.4 - Logout functionality
+# Sidebar
 with st.sidebar:
-    st.markdown("## 👤 User Profile")
-    display_user_info(location='sidebar')
-    logout_button(location='sidebar')
-    
-    st.markdown("---")
-    
     st.markdown("## 📊 Analysis Options")
     st.info("""
     **General ATS Score**: Upload resume only for overall ATS compatibility analysis.

@@ -1,0 +1,10 @@
+# AWS Elastic Beanstalk - Model API Requirements
+flask==3.0.0
+torch==2.1.0
+transformers==4.35.0
+gunicorn==21.2.0
+boto3==1.34.0
+python-dotenv==1.0.0
+
+# Optional: For GPU support (if using GPU instances)
+# torch==2.1.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html

@@ -1,0 +1,20 @@
+# Ignore these files when deploying to Elastic Beanstalk
+.git/
+.gitignore
+*.pyc
+__pycache__/
+.env
+.venv/
+venv/
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+.hypothesis/
+tests/
+docs/
+notebooks/
+*.md
+!README.md
