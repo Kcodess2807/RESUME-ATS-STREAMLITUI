@@ -23,7 +23,8 @@ st.set_page_config(
 # Load custom CSS
 def load_css():
     try:
-        with open('assets/styles.css', 'r') as f:
+        css_path = Path(__file__).parent / 'assets' / 'styles.css'
+        with open(css_path, 'r') as f:
             return f'<style>{f.read()}</style>'
     except FileNotFoundError:
         return ''
