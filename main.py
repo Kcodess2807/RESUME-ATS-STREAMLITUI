@@ -22,12 +22,43 @@ st.set_page_config(
 from streamlit_google_auth import Authenticate
 
 # Initialize authenticator
-authenticator = Authenticate(
-    secret_credentials_path='google_credentials.json',
-    cookie_name='ats_resume_scorer_cookie',
-    cookie_key='ats_resume_scorer_secret_key',
-    redirect_uri='http://localhost:8501',
-)
+# In production (Streamlit Cloud), credentials come from secrets
+# In local dev, they come from google_credentials.json
+try:
+    authenticator = Authenticate(
+        secret_credentials_path='google_credentials.json',
+        cookie_name='ats_resume_scorer_cookie',
+        cookie_key='ats_resume_scorer_secret_key',
+        redirect_uri='http://localhost:8501',
+    )
+except FileNotFoundError:
+    # Production: use secrets instead of file
+    import json
+    import tempfile
+    
+    # Create credentials from secrets
+    google_oauth = st.secrets.get("google_oauth", {})
+    credentials = {
+        "web": {
+            "client_id": google_oauth.get("client_id"),
+            "client_secret": google_oauth.get("client_secret"),
+            "redirect_uris": [google_oauth.get("redirect_uri", "http://localhost:8501")],
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token"
+        }
+    }
+    
+    # Write to temporary file
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        json.dump(credentials, f)
+        temp_creds_path = f.name
+    
+    authenticator = Authenticate(
+        secret_credentials_path=temp_creds_path,
+        cookie_name='ats_resume_scorer_cookie',
+        cookie_key='ats_resume_scorer_secret_key',
+        redirect_uri=google_oauth.get("redirect_uri", "http://localhost:8501"),
+    )
 
 # Check authentication
 authenticator.check_authentification()
