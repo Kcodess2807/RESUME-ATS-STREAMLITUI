@@ -4,7 +4,7 @@
 streamlit>=1.35.0
 pyarrow>=14.0.0
 
-# Database
+# Database (for history storage)
 supabase>=2.0.0
 
 # File parsing
