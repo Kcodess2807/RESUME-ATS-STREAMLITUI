@@ -11,6 +11,19 @@ A comprehensive web application that analyzes resumes for Applicant Tracking Sys
 - **Job Description Comparison**: Compare resume against specific job postings
 - **Actionable Feedback**: Receive prioritized recommendations for improvement
 - **Local AI Models**: All processing runs locally for privacy and offline capability
+- **🔐 Google OAuth Authentication**: Secure sign-in with Google accounts
+- **📊 Personal History**: Track your resume improvements over time (requires login)
+
+## Authentication
+
+This app uses Supabase + Google OAuth for secure authentication. Users can:
+- Sign in with their Google account
+- Access personalized history and saved analyses
+- Keep their data private and secure
+
+**Setup Guide**: See [GOOGLE_OAUTH_SETUP.md](./GOOGLE_OAUTH_SETUP.md) for complete OAuth configuration instructions.
+
+**Quick Start**: See [AUTH_QUICK_START.md](./AUTH_QUICK_START.md) for a 5-minute setup guide.
 
 ## Setup Instructions
 
@@ -18,6 +31,8 @@ A comprehensive web application that analyzes resumes for Applicant Tracking Sys
 
 - Python 3.8 or higher
 - pip (Python package manager)
+- (Optional) Google Cloud Console account for OAuth
+- (Optional) Supabase account for authentication
 
 ### Installation
 
@@ -48,6 +63,11 @@ A comprehensive web application that analyzes resumes for Applicant Tracking Sys
    - Download spaCy language model (en_core_web_md)
    - Download NLTK data packages
    - Set up the project structure
+
+5. **Configure Authentication** (Optional):
+   - Copy `.env.example` to `.env` and add your Supabase credentials
+   - Or configure `.streamlit/secrets.toml` (see AUTH_QUICK_START.md)
+   - Run `python test_auth_setup.py` to verify your configuration
 
 ### Manual Setup (Alternative)
 

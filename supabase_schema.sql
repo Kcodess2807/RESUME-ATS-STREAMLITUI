@@ -4,7 +4,7 @@
 -- Create the analysis_history table
 CREATE TABLE IF NOT EXISTS analysis_history (
     id BIGSERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
+    user_id TEXT NOT NULL,  -- Can be UUID (authenticated) or session_xxx (anonymous)
     filename TEXT NOT NULL,
     overall_score INTEGER NOT NULL,
     formatting_score INTEGER NOT NULL,
@@ -25,13 +25,30 @@ CREATE INDEX IF NOT EXISTS idx_analysis_history_created_at ON analysis_history(c
 -- Enable Row Level Security (RLS)
 ALTER TABLE analysis_history ENABLE ROW LEVEL SECURITY;
 
--- Create policy to allow all operations (since we're not using Supabase auth)
--- Users are identified by session_id, not authenticated users
-CREATE POLICY "Allow all operations" ON analysis_history
-    FOR ALL
-    USING (true)
-    WITH CHECK (true);
+-- Drop old policy if exists
+DROP POLICY IF EXISTS "Allow all operations" ON analysis_history;
 
--- Note: Since authentication is removed, we use session-based user_ids
--- Each session gets a unique ID like "session_a1b2c3d4"
--- This means history is tied to browser sessions, not user accounts
+-- Create policy for authenticated users to access their own data
+CREATE POLICY "Users can access their own history" ON analysis_history
+    FOR ALL
+    USING (
+        -- Allow if user_id matches authenticated user's ID
+        auth.uid()::text = user_id
+        OR
+        -- Allow if user_id is a session ID (for backwards compatibility)
+        user_id LIKE 'session_%'
+    )
+    WITH CHECK (
+        -- Allow insert/update if user_id matches authenticated user's ID
+        auth.uid()::text = user_id
+        OR
+        -- Allow if user_id is a session ID (for backwards compatibility)
+        user_id LIKE 'session_%'
+    );
+
+-- Note: With Google OAuth authentication enabled:
+-- - Authenticated users: user_id will be their Supabase auth UUID
+-- - Anonymous users: user_id will be "session_xxx" (session-based)
+-- - History is tied to user accounts for authenticated users
+-- - History is tied to browser sessions for anonymous users
+

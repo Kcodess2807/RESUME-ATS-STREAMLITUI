@@ -58,12 +58,20 @@ def get_supabase_client() -> Optional[Any]:
 
 def get_user_id() -> str:
     """
-    Generate a unique identifier for the current session.
-    No authentication - just a session-based ID.
+    Get unique identifier for the current user.
+    Uses authenticated user email if available, otherwise falls back to session ID.
     
     Returns:
-        String identifier for the current session
+        String identifier for the current user/session
     """
+    # Try to get authenticated user email from streamlit-google-auth
+    if st.session_state.get('connected'):
+        user_info = st.session_state.get('user_info', {})
+        email = user_info.get('email')
+        if email:
+            return email
+    
+    # Fallback to session-based ID for non-authenticated users
     if 'session_id' not in st.session_state:
         st.session_state.session_id = f"session_{uuid.uuid4().hex[:8]}"
     return st.session_state.session_id

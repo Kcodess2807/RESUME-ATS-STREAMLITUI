@@ -36,6 +36,9 @@ ENV/
 # Streamlit
 .streamlit/secrets.toml
 
+# Google OAuth Credentials (NEVER COMMIT!)
+google_credentials.json
+
 # Models (cached locally)
 models/*.bin
 models/*.pkl
