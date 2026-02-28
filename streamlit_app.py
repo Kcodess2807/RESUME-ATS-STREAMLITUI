@@ -114,7 +114,7 @@ if "user" not in st.session_state:
         
         auth_url = get_auth_url()
         st.markdown(
-            f'<a href="{auth_url}" target="_self">'
+            f'<a href="{auth_url}" target="_top">'
             '<button style="background-color:#4285F4;color:white;padding:12px 24px;'
             'border:none;border-radius:4px;cursor:pointer;font-size:16px;font-weight:500;">'
             '🔐 Login with Google</button></a>',
