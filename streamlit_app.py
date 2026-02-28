@@ -29,14 +29,14 @@ try:
     # Try top-level keys first (e.g., GOOGLE_CLIENT_ID = "...")
     GOOGLE_CLIENT_ID = st.secrets["GOOGLE_CLIENT_ID"]
     GOOGLE_CLIENT_SECRET = st.secrets["GOOGLE_CLIENT_SECRET"]
-    REDIRECT_URI = st.secrets["REDIRECT_URI"]
+    REDIRECT_URI = st.secrets["REDIRECT_URI"].rstrip("/")
 except KeyError:
     try:
         # Fallback to nested [google_oauth] section
         google_oauth = st.secrets["google_oauth"]
         GOOGLE_CLIENT_ID = google_oauth["client_id"]
         GOOGLE_CLIENT_SECRET = google_oauth["client_secret"]
-        REDIRECT_URI = google_oauth.get("redirect_uri", "http://localhost:8501")
+        REDIRECT_URI = google_oauth.get("redirect_uri", "http://localhost:8501").rstrip("/")
     except KeyError:
         st.error(
             "⚠️ Google OAuth credentials not configured. "
