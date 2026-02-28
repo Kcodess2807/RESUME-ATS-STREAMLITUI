@@ -5,11 +5,7 @@ streamlit>=1.35.0
 pyarrow>=14.0.0
 
 # Authentication
-streamlit-google-auth==1.1.8
-extra-streamlit-components>=0.1.60
-PyJWT>=2.0.0
-google-auth-oauthlib>=1.0.0
-google-api-python-client>=2.0.0
+streamlit-authenticator>=0.3.0
 
 # Database
 supabase>=2.3.0
