@@ -23,22 +23,27 @@ import requests
 import urllib.parse
 import json
 
-# Debug: Show available secret keys
-st.write("🔍 Debug - Secrets keys available:", list(st.secrets.keys()))
-
 # Get credentials from secrets with proper error handling
+# Supports both top-level keys and nested [google_oauth] section
 try:
+    # Try top-level keys first (e.g., GOOGLE_CLIENT_ID = "...")
     GOOGLE_CLIENT_ID = st.secrets["GOOGLE_CLIENT_ID"]
     GOOGLE_CLIENT_SECRET = st.secrets["GOOGLE_CLIENT_SECRET"]
     REDIRECT_URI = st.secrets["REDIRECT_URI"]
-except KeyError as e:
-    st.error(f"Missing secret key: {e}")
-    st.write("Available keys:", list(st.secrets.keys()))
-    st.stop()
-
-# Debug: Show what we got
-st.write("🔍 Debug - CLIENT_ID:", GOOGLE_CLIENT_ID)
-st.write("🔍 Debug - REDIRECT_URI:", REDIRECT_URI)
+except KeyError:
+    try:
+        # Fallback to nested [google_oauth] section
+        google_oauth = st.secrets["google_oauth"]
+        GOOGLE_CLIENT_ID = google_oauth["client_id"]
+        GOOGLE_CLIENT_SECRET = google_oauth["client_secret"]
+        REDIRECT_URI = google_oauth.get("redirect_uri", "http://localhost:8501")
+    except KeyError:
+        st.error(
+            "⚠️ Google OAuth credentials not configured. "
+            "Please add GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and REDIRECT_URI "
+            "to your Streamlit secrets (either as top-level keys or under [google_oauth])."
+        )
+        st.stop()
 
 GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
