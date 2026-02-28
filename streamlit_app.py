@@ -113,13 +113,12 @@ if "user" not in st.session_state:
         """, unsafe_allow_html=True)
         
         auth_url = get_auth_url()
-        st.markdown(
-            f'<a href="{auth_url}" target="_top">'
-            '<button style="background-color:#4285F4;color:white;padding:12px 24px;'
-            'border:none;border-radius:4px;cursor:pointer;font-size:16px;font-weight:500;">'
-            '🔐 Login with Google</button></a>',
-            unsafe_allow_html=True
-        )
+        
+        # Center the button
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col2:
+            st.link_button("🔐 Login with Google", auth_url, use_container_width=True)
+        
         st.stop()
 
 # User is authenticated
