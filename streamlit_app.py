@@ -23,10 +23,22 @@ import requests
 import urllib.parse
 import json
 
-# Get credentials from secrets (support both flat and nested formats)
-GOOGLE_CLIENT_ID = st.secrets.get("GOOGLE_CLIENT_ID") or st.secrets.get("google_oauth", {}).get("client_id")
-GOOGLE_CLIENT_SECRET = st.secrets.get("GOOGLE_CLIENT_SECRET") or st.secrets.get("google_oauth", {}).get("client_secret")
-REDIRECT_URI = st.secrets.get("REDIRECT_URI") or st.secrets.get("google_oauth", {}).get("redirect_uri", "http://localhost:8501")
+# Debug: Show available secret keys
+st.write("🔍 Debug - Secrets keys available:", list(st.secrets.keys()))
+
+# Get credentials from secrets with proper error handling
+try:
+    GOOGLE_CLIENT_ID = st.secrets["GOOGLE_CLIENT_ID"]
+    GOOGLE_CLIENT_SECRET = st.secrets["GOOGLE_CLIENT_SECRET"]
+    REDIRECT_URI = st.secrets["REDIRECT_URI"]
+except KeyError as e:
+    st.error(f"Missing secret key: {e}")
+    st.write("Available keys:", list(st.secrets.keys()))
+    st.stop()
+
+# Debug: Show what we got
+st.write("🔍 Debug - CLIENT_ID:", GOOGLE_CLIENT_ID)
+st.write("🔍 Debug - REDIRECT_URI:", REDIRECT_URI)
 
 GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
