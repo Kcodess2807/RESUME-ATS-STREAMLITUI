@@ -64,10 +64,9 @@ def get_user_id() -> str:
     Returns:
         String identifier for the current user/session
     """
-    # Try to get authenticated user email from streamlit-google-auth
-    if st.session_state.get('connected'):
-        user_info = st.session_state.get('user_info', {})
-        email = user_info.get('email')
+    # Try to get authenticated user email
+    if "user" in st.session_state:
+        email = st.session_state.user.get("email")
         if email:
             return email
     

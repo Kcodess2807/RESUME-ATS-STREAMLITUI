@@ -18,62 +18,97 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Google Authentication using streamlit-oauth
-from streamlit_oauth import OAuth2Component
-import jwt
-import os
+# Google OAuth2 Authentication - Pure Python Implementation
+import requests
+import urllib.parse
+import json
 
 GOOGLE_CLIENT_ID = st.secrets["GOOGLE_CLIENT_ID"]
 GOOGLE_CLIENT_SECRET = st.secrets["GOOGLE_CLIENT_SECRET"]
 REDIRECT_URI = st.secrets.get("REDIRECT_URI", "http://localhost:8501")
 
-oauth2 = OAuth2Component(
-    GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET,
-    "https://accounts.google.com/o/oauth2/auth",
-    "https://oauth2.googleapis.com/token",
-    "https://oauth2.googleapis.com/token",
-    "https://oauth2.googleapis.com/revoke",
-)
+GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
+GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
+GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
-# Check if user is authenticated
-if "token" not in st.session_state:
-    # Show welcome message
-    st.markdown("""
-    <div style="text-align: center; padding: 3rem 0;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem;">🎯 ATS Resume Scorer</h1>
-        <p style="font-size: 1.3rem; color: #666; margin-bottom: 2rem;">
-            Optimize your resume for Applicant Tracking Systems
-        </p>
-        <p style="font-size: 1.1rem; color: #888;">
-            Please sign in with your Google account to continue
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Show login button
-    result = oauth2.authorize_button(
-        "Login with Google",
-        REDIRECT_URI,
-        "openid email profile",
-    )
-    
-    if result and "token" in result:
-        st.session_state.token = result["token"]
-        st.rerun()
-    
-    st.stop()
+def get_auth_url():
+    """Generate Google OAuth2 authorization URL"""
+    params = {
+        "client_id": GOOGLE_CLIENT_ID,
+        "redirect_uri": REDIRECT_URI,
+        "response_type": "code",
+        "scope": "openid email profile",
+        "access_type": "offline",
+    }
+    return GOOGLE_AUTH_URL + "?" + urllib.parse.urlencode(params)
 
-# User is authenticated - decode token to get user info
-token = st.session_state.token
-user_info = jwt.decode(
-    token["id_token"],
-    options={"verify_signature": False}
-)
+def exchange_code_for_token(code):
+    """Exchange authorization code for access token"""
+    data = {
+        "code": code,
+        "client_id": GOOGLE_CLIENT_ID,
+        "client_secret": GOOGLE_CLIENT_SECRET,
+        "redirect_uri": REDIRECT_URI,
+        "grant_type": "authorization_code",
+    }
+    response = requests.post(GOOGLE_TOKEN_URL, data=data)
+    return response.json()
 
-email = user_info.get("email")
-name = user_info.get("name")
-picture = user_info.get("picture")
+def get_user_info(access_token):
+    """Get user information from Google"""
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = requests.get(GOOGLE_USERINFO_URL, headers=headers)
+    return response.json()
+
+# Authentication flow
+if "user" not in st.session_state:
+    query_params = st.query_params
+    
+    if "code" in query_params:
+        # Handle OAuth callback
+        code = query_params["code"]
+        try:
+            token_data = exchange_code_for_token(code)
+            if "access_token" in token_data:
+                user_info = get_user_info(token_data["access_token"])
+                st.session_state.user = user_info
+                st.query_params.clear()
+                st.rerun()
+            else:
+                st.error("Authentication failed. Please try again.")
+                st.stop()
+        except Exception as e:
+            st.error(f"Authentication error: {str(e)}")
+            st.stop()
+    else:
+        # Show login page
+        st.markdown("""
+        <div style="text-align: center; padding: 3rem 0;">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">🎯 ATS Resume Scorer</h1>
+            <p style="font-size: 1.3rem; color: #666; margin-bottom: 2rem;">
+                Optimize your resume for Applicant Tracking Systems
+            </p>
+            <p style="font-size: 1.1rem; color: #888;">
+                Please sign in with your Google account to continue
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        auth_url = get_auth_url()
+        st.markdown(
+            f'<a href="{auth_url}" target="_self">'
+            '<button style="background-color:#4285F4;color:white;padding:12px 24px;'
+            'border:none;border-radius:4px;cursor:pointer;font-size:16px;font-weight:500;">'
+            '🔐 Login with Google</button></a>',
+            unsafe_allow_html=True
+        )
+        st.stop()
+
+# User is authenticated
+user = st.session_state.user
+email = user.get("email")
+name = user.get("name")
+picture = user.get("picture")
 
 # Load custom CSS
 def load_css():
@@ -126,9 +161,9 @@ with st.sidebar:
         st.caption(email or '')
     
     if st.button("🚪 Logout", use_container_width=True):
-        # Clear token and rerun
-        if "token" in st.session_state:
-            del st.session_state.token
+        # Clear user session and rerun
+        if "user" in st.session_state:
+            del st.session_state.user
         st.rerun()
 
 # Main content area - render based on current view

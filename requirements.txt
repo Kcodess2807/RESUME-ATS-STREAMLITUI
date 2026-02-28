@@ -4,8 +4,8 @@
 streamlit>=1.35.0
 pyarrow>=14.0.0
 
-# Authentication
-streamlit-google-auth==1.1.8
+# HTTP requests (for OAuth)
+requests>=2.31.0
 
 # Database
 supabase>=2.3.0
