@@ -16,12 +16,21 @@ pdfplumber==0.9.0
 python-docx==1.0.1
 PyPDF2>=3.0.0
 
-# NLP - spaCy (model downloaded at runtime)
-spacy[lookups]>=3.7.4
-typer>=0.9.0
-click>=8.0.0
-spacy-legacy>=3.0.11
-spacy-loggers>=1.0.0
+# NLP - spaCy with all dependencies explicitly listed
+spacy==3.7.4
+typer==0.9.0
+click==8.1.7
+spacy-legacy==3.0.12
+spacy-loggers==1.0.5
+catalogue==2.0.10
+wasabi==1.1.2
+srsly==2.4.8
+cymem==2.0.8
+preshed==3.0.9
+thinc==8.2.3
+murmurhash==1.0.10
+blis==0.7.11
+pydantic>=1.10.0,<3.0.0
 
 # Sentence Transformers (CPU)
 sentence-transformers>=2.2.2
